@@ -1,0 +1,16 @@
+{
+	"lisensi": {
+		"email": "deviskanugroho@gmail.com", 
+		"pwd": "passtess",
+		"user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.37",
+		"access-token": "14f529331be1cec9fe0dd437dffe7bedc1713"
+	},
+
+	"upload":{
+		"path": "H://Koi/media/",
+		"delayUpload": 300,
+		"delayAccount": 500,
+		"header": "",
+		"footer": "\n=> Cek link Whatsapp & Website Stock di Bio Facebook\n=> OFFICIAL STORE KOI BLITAR\n=> Sudah karantina, siap kirim ke seluruh daerah"
+	}
+}
