@@ -9,8 +9,19 @@ import json
 import string
 import requests
 import os
+from oauth2client.service_account import ServiceAccountCredentials
+import gspread
 
-BASE_SESSION = "H://Bot/bot lain/session shopee/session/"
+# Read Data in Config
+user = open(r"data/config.json", "r")
+dataJsons = json.load(user)
+emailConfig = dataJsons['lisensi']['email']
+passwordConfig = dataJsons['lisensi']['pwd']
+userAgentConfig = dataJsons['lisensi']['user-agent']
+accesToken = dataJsons['lisensi']['access-token']
+
+#SETTING
+BASE_SESSION = dataJsons['path_session']
 
 def login(username, password):
     chrome_options = Options()
@@ -100,13 +111,43 @@ def read_session(username):
 	
 
 def main():
-    options = int(input("1. Create New Session\n2. Read Session\nChose options : "))
-    if options == 1:
-        add_session()
-    elif options == 2:
-        os.system("cls")
-        username = input("Masukkan Username : ")
-        read_session(username)
+    conditionConfig = False
+    try:
+        scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_name("data/config-cd7413190612.json", scope)
+        client = gspread.authorize(creds)
+        sheet = client.open("config").sheet1
+        datas = sheet.get_all_records()
+
+        for data in datas:
+            email = data['Email']
+            password = data['Password']
+            userAgent = data['User Agent']
+            status = data['Status']
+            token = data['Token']
+                    
+            if email == emailConfig and password == passwordConfig and userAgent == userAgentConfig and status == 'Active' and accesToken == token:
+                print('Login config success!!')
+                conditionConfig == True
+                options = int(input("1. Create New Session\n2. Read Session\nChose options : "))
+                if options == 1:
+                    add_session()
+                elif options == 2:
+                    os.system("cls")
+                    username = input("Masukkan Username : ")
+                    read_session(username)
+                break
+            elif email == emailConfig and password == passwordConfig and userAgent == userAgentConfig and status != 'Active' and accesToken == token:
+                print('Login Failed!! Your Config non-active')
+                sleep(3)
+                    # else:
+                        # print(userAgent+"\n"+userAgentConfig)
+    except:
+        pass
+
+    if conditionConfig == False:
+        print('[ INFO ]__main__ : Login Failed!!')
+        sleep(3)    
 
 if __name__ == '__main__':
     try:
