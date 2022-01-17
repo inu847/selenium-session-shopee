@@ -1,10 +1,10 @@
 {
 	"lisensi": {
-		"email": "deviskanugroho@gmail.com", 
-		"pwd": "passtess",
-		"user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.37",
-		"access-token": "14f529331be1cec9fe0dd437dffe7bedc1713"
+		"email": "sessionadi@gmail.com", 
+		"pwd": "sessionshopee",
+		"user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+		"access-token": "876asdfbe0c92bad4046b75387f85c396e5ddd12"
 	},
 	
-	"path_session": "H://Bot/bot lain/session shopee/session/"
+	"path_session": "H://Bot/bot lain/session shopee/session/"	
 }
