@@ -128,10 +128,9 @@ def login(userHotmail, passrHotmail, username, password):
 def main():
     jadwal = input("Post Penjadwalan y/n ")
     if jadwal == "y":
-        link = input("Masukkan Jadwal Waktu Post *format(jam:menit) : ")
+        times = input("Masukkan Jadwal Waktu Post *format(jam:menit) : ")
 
-    if link:
-        times_flashSale = link.split(":")
+        times_flashSale = times.split(":")
         hI = int(times_flashSale[0])
         mI = int(times_flashSale[1])
         # WAIT STORE
