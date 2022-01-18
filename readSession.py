@@ -28,20 +28,34 @@ def main():
     username = input("Masukkan Username : ")
 
     chrome_options = Options()
-    chrome_options.add_argument("--no-sandbox");
-    chrome_options.add_argument("start-maximized");
-    chrome_options.add_argument("disable-infobars");
-    chrome_options.add_argument("--disable-extensions");
-    chrome_options.add_argument("--disable-gpu");
-    chrome_options.add_argument("--disable-dev-shm-usage");
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("start-maximized")
+    chrome_options.add_argument("disable-infobars")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--log-level=3")
+    chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--user-data-dir=" + BASE_SESSION + username)
 
     PATH = 'data/chromedriver'
     driver = webdriver.Chrome(PATH, chrome_options=chrome_options)
     driver.get("https://shopee.co.id/")
+    print("[ INFO ]_main_: opened session " + username)
 
+    while True:
+        action = input("[ INFO ]_main_: press 0 to quit session and enter to new session")
+        if action == "0":
+            print("[ INFO ]_main_: program closed!!")
+            sleep(0.5)
+            driver.quit()
+            break
+        else:
+            driver.quit()
+            main()    
+    return False
 
 if __name__ == '__main__':
+    main()
     try:
         os.mkdir("session")
     except:
@@ -66,16 +80,7 @@ if __name__ == '__main__':
             if email == emailConfig and password == passwordConfig and userAgent == userAgentConfig and status == 'Active' and accesToken == token:
                 print('Login config success!!')
                 conditionConfig == True
-                action = "1"
-                while action != "0":
-                    # while True:
-                    #     os.system("cls")
-                    #     print("[ INFO ]_main_: session time " + str(time))
-                    main()
-                    action = input("[ INFO ]_main_: press 0 to quit session and enter to new session")
-                #     sleep(1)
-                #     time += 1
-                driver.quit()
+                main()
                 break
             elif email == emailConfig and password == passwordConfig and userAgent == userAgentConfig and status != 'Active' and accesToken == token:
                 print('Login Failed!! Your Config non-active')

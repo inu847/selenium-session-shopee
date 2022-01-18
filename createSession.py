@@ -24,17 +24,58 @@ accesToken = dataJsons['lisensi']['access-token']
 # SETTING
 BASE_SESSION = dataJsons['path_session']
 
+def verivyHotmail(driver, userHotmail, passrHotmail):
+    driver.execute_script('window.open("https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1639366524&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7acc44a4-9441-dc05-d889-cd9a3cfb9351&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015","_blank");')
+    driver.implicitly_wait(10)
 
-def login(username, password):
+    # driver.get(
+    #     "https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1639366524&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fnlp%3d1%26RpsCsrfState%3d7acc44a4-9441-dc05-d889-cd9a3cfb9351&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=90015")
+    driver.switch_to.window(driver.window_handles[1])
+    print("[ INFO ]__main__: Verivy hotmail " + userHotmail)
+    try:
+        inputUser = driver.find_element_by_name("loginfmt")
+        inputUser.send_keys(userHotmail)
+        inputUser.send_keys(Keys.ENTER)
+        driver.implicitly_wait(10)
+
+        inputPassword = driver.find_element_by_name("passwd")
+        inputPassword.send_keys(passrHotmail)
+        driver.implicitly_wait(10)
+        try:
+            driver.find_element_by_xpath('//*[@value="Sign in"]').click()
+            # driver.execute_script("arguments[0].click();", btnSingin)
+        except:
+            inputPassword.send_keys(Keys.ENTER)
+        driver.implicitly_wait(10)
+
+        try:
+            driver.find_element_by_id("idBtn_Back").click()
+            driver.implicitly_wait(20)
+            try:
+                driver.find_element_by_id("O365_MainLink_MePhoto")
+                driver.get("https://outlook.live.com/mail/0/junkemail")
+            except:
+                pass
+        except:
+            pass
+        input("[ INFO ]__main__: Account Has Verivied")
+    except:
+        input("[ INFO ]__main__: Login " + userHotmail + " Gagal")
+
+    
+
+def login(userHotmail, passrHotmail, username, password):
     chrome_options = Options()
     chrome_options.add_argument('--disable-notifications')
-    chrome_options.add_argument("--no-sandbox");
-    chrome_options.add_argument("--headless");
-    # chrome_options.add_argument("start-maximized");
-    chrome_options.add_argument("disable-infobars");
-    chrome_options.add_argument("--disable-extensions");
-    chrome_options.add_argument("--disable-gpu");
-    chrome_options.add_argument("--disable-dev-shm-usage");
+    chrome_options.add_argument("--no-sandbox")
+    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--log-level=3")
+    chrome_options.add_argument("start-maximized")
+    chrome_options.add_argument("disable-infobars")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+
     try:
         chrome_options.add_argument("--user-data-dir=" + BASE_SESSION + username)
     except:
@@ -57,8 +98,18 @@ def login(username, password):
 
         passwd.send_keys(Keys.RETURN)
         driver.implicitly_wait(10)
-        driver.find_element_by_xpath('//*[@class="navbar__username"]')
-        print("[ INFO ]__main__: Logged in " + username)
+
+        try:
+            driver.implicitly_wait(10)
+            driver.find_element_by_xpath('//*[text()="Verifikasi dengan link email"]')
+            driver.find_element_by_xpath('//*[@class="WMREvW"]').click()
+            verivyHotmail(driver, userHotmail, passrHotmail)
+            driver.switch_to.window(driver.window_handles[0])
+        except:
+            pass
+
+        profileAccount = driver.find_element_by_xpath('//*[@class="navbar__username"]').text
+        print("[ INFO ]__main__: Logged in " + profileAccount)
         print(f"[ INFO ]__main__: create session {username}")
         writers = open('status.txt', 'a+', encoding="utf-8")
         writers.writelines(f"{username}|{password}|Success\n")
@@ -85,6 +136,7 @@ def main():
         mI = int(times_flashSale[1])
         # WAIT STORE
         while True:
+            sleep(0.5)
             x = datetime.datetime.now()
             h = int(x.strftime("%H"))
             m = int(x.strftime("%M"))
@@ -97,12 +149,11 @@ def main():
 
             limit = hourse_second + minute_second + rate_second
             refresh = limit % 2
-            # sleep(0.1)
+            
             os.system('cls')
             dateTimeObj = datetime.datetime.now()
             timestampStr = dateTimeObj.strftime("%H:%M:%S")
             print("[", timestampStr, "]""[INFO :] " + str(limit) + " second")
-            delay(0,5)
 
             if limit <= 0:
                 print("finished!!")
@@ -115,9 +166,11 @@ def main():
     for (akun, i) in zip(accounts, range(0, lengthAccount)):
         print(f"[ INFO ]__main__: in progress {i + 1}/{lengthAccount}")
         accountStrip = akun.strip()
-        username = accountStrip.split("|")[0]
-        password = accountStrip.split("|")[1]
-        login(username, password)
+        userHotmail = accountStrip.split("|")[0]
+        passrHotmail = accountStrip.split("|")[1]
+        username = accountStrip.split("|")[2]
+        password = accountStrip.split("|")[3]
+        login(userHotmail, passrHotmail, username, password)
 
 if __name__ == '__main__':
     try:
